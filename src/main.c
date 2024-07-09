@@ -1,5 +1,4 @@
 #include "player.h"
-#include <stdio.h>
 #include <raylib.h>
 #include <stdlib.h>
 #include "main.h"
@@ -10,24 +9,13 @@ int main(void) {
 	SetExitKey(KEY_NULL);
 
 	Player *player = InitPlayer();
-	bool flipped = false;
 
 	SetTargetFPS(60);
 
 	while (!WindowShouldClose()) {
-		MovePlayer(player);
-		flipped = PlayerFacingLeft();
-
 		BeginDrawing();
 
-		printf("flipped is %d\r", flipped);
-		DrawRectangleV(player->pos, (Vector2){10, 10}, RED);
-		DrawTextureRec(
-				player->sprite, 
-				flipped ? (Rectangle){player->pos.x, player->pos.y, -10, 10} : (Rectangle){player->pos.x, player->pos.y, 10, 10},
-				// (Rectangle){player->pos.x, player->pos.y, -10, 10},
-				player->pos, WHITE
-			);
+		HandlePlayerActions(player);
 		ClearBackground(BLACK);
 
 		EndDrawing();
@@ -37,4 +25,11 @@ int main(void) {
 	free(player);
 
 	return 0;
+}
+
+void HandlePlayerActions(Player *player) {
+	MovePlayer(player);
+	// PlayerAttack(player);
+	DrawTextureRec(player->sprite, PlayerDirectionRec(*player), player->pos, WHITE);
+	RenderIndicator(player);
 }
