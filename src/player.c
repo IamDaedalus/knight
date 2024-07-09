@@ -1,14 +1,28 @@
 #include "player.h"
 #include "main.h"
 #include <stdio.h>
-#include <string.h>
 #include <raylib.h>
 #include <stdbool.h>
-#include <stdlib.h>
 
 static float moveTimer = MOVE_TIMER_RESET;
 static bool flipped = false;
-static Texture2D indicators[4];
+
+/* InitPlayer sets the player's properties for the game */
+Player *InitPlayer(void) {
+	Vector2 playerPos = {(float)SCR_H/2, (float)SCR_W/2};
+	Player *player = malloc(sizeof(Player));
+	if (!player) {
+		exit(EXIT_FAILURE);
+	}
+
+	LoadGraphicsFor(player->sprites, 2, (char*[]){"assets1.png", "assets2.png"});
+	LoadGraphicsFor(player->indicators, 4, (char*[]){"assets3.png", "assets4.png", "assets5.png", "assets6.png"});
+	player->curSprite = player->sprites[0];
+	player->pos = playerPos;
+	player->attackDir = ATK_RIGHT;
+
+	return player;
+}
 
 Rectangle PlayerDirectionRec(Player player) {
 	int f = flipped ? -MOVE_BLOCK : MOVE_BLOCK;
@@ -42,20 +56,10 @@ void MovePlayer(Player *player) {
 	}
 }
 
-// void PlayerAttack(Player *player) {
-// 	if (IsKeyDown(KEY_I)) {
-// 		player->attackDir = ATK_UP;
-// 	} else if (IsKeyDown(KEY_L)) {
-// 		player->attackDir = ATK_RIGHT;
-// 	} else if (IsKeyDown(KEY_K)) {
-// 		player->attackDir = ATK_DOWN;
-// 	} else if (IsKeyDown(KEY_J)) {
-// 		player->attackDir = ATK_LEFT;
-// 	}
-// }
-
+/* RenderIndicator renders the arrow to show how far an attack can hit */
 void RenderIndicator(Player *player) {
 	int attackDir = player->attackDir;
+	// positions for the indicator to be
 	Vector2 DIRECTION_OFFSETS[] = {
 		{player->pos.x,player->pos.y - MOVE_BLOCK},  	// UP
 		{player->pos.x + MOVE_BLOCK, player->pos.y},   	// RIGHT
@@ -66,37 +70,19 @@ void RenderIndicator(Player *player) {
 	DrawTextureV(player->indicators[attackDir], DIRECTION_OFFSETS[attackDir], WHITE);
 }
 
-void InitIndicators() {
-	char indicatorAsset[MAX_PATH];
+/* LoadGraphics loads images into memory based on their names and for use later */
+void LoadGraphicsFor(Texture2D *arr, size_t len, char *names[]) {
+	char path[MAX_PATH];
 
-	for (int i = 0; i < 4; i++) {
-		snprintf(indicatorAsset, MAX_PATH, "./assets/graphics/assets%d.png", i+3);
-		Image img = LoadImage(indicatorAsset);
+	for (size_t i = 0; i < len; i++) {
+		snprintf(path, MAX_PATH, "./assets/graphics/%s", names[i]);
+		Image img = LoadImage(path);
 		if (img.data) {
-			indicators[i] = LoadTextureFromImage(img);
+			arr[i] = LoadTextureFromImage(img);
+			SetTextureFilter(arr[i], TEXTURE_FILTER_POINT);
 			UnloadImage(img);
 		} else {
-			printf("Failed to load image: %s\n", indicatorAsset);
+			printf("Failed to load image: %s\n", names[i]);
 		}
 	}
-}
-
-Player *InitPlayer(void) {
-	Image img = LoadImage("./assets/graphics/assets1.png");
-	Vector2 playerPos = {(float)SCR_H/2, (float)SCR_W/2};
-	Player *player = malloc(sizeof(Player));
-	if (!player) {
-		exit(EXIT_FAILURE);
-	}
-
-	InitIndicators();
-
-	player->sprite = LoadTextureFromImage(img);
-	SetTextureFilter(player->sprite, TEXTURE_FILTER_POINT);
-	player->pos = playerPos;
-	player->attackDir = ATK_RIGHT;
-	memcpy(player->indicators, indicators, 4 * sizeof(Texture2D));
-
-	UnloadImage(img);
-	return player;
 }

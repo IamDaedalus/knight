@@ -5,7 +5,7 @@
 
 int main(void) {
 	InitWindow(SCR_W, SCR_H, "knight game");
-	// ToggleFullscreen();
+	ToggleFullscreen();
 	SetExitKey(KEY_NULL);
 
 	Player *player = InitPlayer();
@@ -30,6 +30,6 @@ int main(void) {
 void HandlePlayerActions(Player *player) {
 	MovePlayer(player);
 	// PlayerAttack(player);
-	DrawTextureRec(player->sprite, PlayerDirectionRec(*player), player->pos, WHITE);
+	DrawTextureRec(player->curSprite, PlayerDirectionRec(*player), player->pos, WHITE);
 	RenderIndicator(player);
 }
