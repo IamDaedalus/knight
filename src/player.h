@@ -5,7 +5,6 @@
 #include <raylib.h>
 
 #define MOVE_BLOCK 10
-#define MAX_PATH 256
 #define MOVE_TIMER_RESET 0.25f
 
 
@@ -28,7 +27,6 @@ typedef struct {
 void MovePlayer(Player *player);
 void PlayerAttack(Player *player);
 void RenderIndicator(Player *player);
-void LoadGraphicsFor(Texture2D *arr, size_t len, char *names[]);
 Rectangle PlayerDirectionRec(Player player);
 Player *InitPlayer(void);
 

@@ -1,5 +1,6 @@
 #include "player.h"
 #include "main.h"
+#include "animator.h"
 #include <stdio.h>
 #include <raylib.h>
 #include <stdbool.h>
@@ -12,7 +13,7 @@ Player *InitPlayer(void) {
 	Vector2 playerPos = {(float)SCR_H/2, (float)SCR_W/2};
 	Player *player = malloc(sizeof(Player));
 	if (!player) {
-		exit(EXIT_FAILURE);
+		return NULL;
 	}
 
 	LoadGraphicsFor(player->sprites, 2, (char*[]){"assets1.png", "assets2.png"});
@@ -70,19 +71,3 @@ void RenderIndicator(Player *player) {
 	DrawTextureV(player->indicators[attackDir], DIRECTION_OFFSETS[attackDir], WHITE);
 }
 
-/* LoadGraphics loads images into memory based on their names and for use later */
-void LoadGraphicsFor(Texture2D *arr, size_t len, char *names[]) {
-	char path[MAX_PATH];
-
-	for (size_t i = 0; i < len; i++) {
-		snprintf(path, MAX_PATH, "./assets/graphics/%s", names[i]);
-		Image img = LoadImage(path);
-		if (img.data) {
-			arr[i] = LoadTextureFromImage(img);
-			SetTextureFilter(arr[i], TEXTURE_FILTER_POINT);
-			UnloadImage(img);
-		} else {
-			printf("Failed to load image: %s\n", names[i]);
-		}
-	}
-}
