@@ -16,7 +16,8 @@ typedef struct {
 } Animator;
 
 
-void LoadGraphicsFor(Texture2D *arr, size_t len, char *names[]);
+void LoadGraphicsFor(Texture2D arr[], size_t len, char *names[]);
+void UnloadGraphicsFor(Texture2D arr[], size_t len);
 void AnimateThing(Texture2D frames[], Vector2 pos, size_t len);
 
 #endif 	/* ANIMATOR_H */

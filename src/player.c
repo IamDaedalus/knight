@@ -1,6 +1,5 @@
 #include "player.h"
-#include "main.h"
-#include "animator.h"
+#include "entity.h"
 #include <stdio.h>
 #include <raylib.h>
 #include <stdbool.h>
@@ -9,65 +8,67 @@ static float moveTimer = MOVE_TIMER_RESET;
 static bool flipped = false;
 
 /* InitPlayer sets the player's properties for the game */
-Player *InitPlayer(void) {
-	Vector2 playerPos = {(float)SCR_H/2, (float)SCR_W/2};
-	Player *player = malloc(sizeof(Player));
-	if (!player) {
+Entity *InitPlayer(void) {
+	Vector2 pos = (Vector2){100, 100};
+	Rectangle coll2D = (Rectangle){pos.x, pos.y, WORLD_DIV, WORLD_DIV};
+	Entity *player =malloc(sizeof(Entity));
+	if (player == NULL) {
 		return NULL;
 	}
 
-	LoadGraphicsFor(player->sprites, 2, (char*[]){"assets1.png", "assets2.png"});
-	LoadGraphicsFor(player->indicators, 4, (char*[]){"assets3.png", "assets4.png", "assets5.png", "assets6.png"});
-	player->curSprite = player->sprites[0];
-	player->pos = playerPos;
-	player->attackDir = ATK_RIGHT;
+	player->render = AddRenderComp(1, 2);
+	if (player->render == NULL) return NULL;
+	player->player = AddPlayerComp();
+	if (player->player == NULL) return NULL;
+	player->transform = AddTransformComp(pos, coll2D);
+	if (player->transform == NULL) return NULL;
 
 	return player;
 }
 
-Rectangle PlayerDirectionRec(Player player) {
-	int f = flipped ? -MOVE_BLOCK : MOVE_BLOCK;
+Rectangle PlayerDirectionRec(Entity player) {
+	int f = flipped ? -WORLD_DIV : WORLD_DIV;
 
-	return (Rectangle){player.pos.x, player.pos.y, f, MOVE_BLOCK};
+	return (Rectangle){player.transform->pos.x, player.transform->pos.y, f, WORLD_DIV};
 }
 
-void MovePlayer(Player *player) {
+void MovePlayer(Entity *player) {
 	if (moveTimer > 0) {
 		moveTimer -= GetFrameTime();
 	} else {
 		if (IsKeyDown(KEY_D)) {
-			player->pos.x += MOVE_BLOCK;
-			player->attackDir = ATK_RIGHT;
+			player->transform->pos.x += WORLD_DIV;
+			player->player->attackDir = ATK_RIGHT;
 			flipped = false;
 			moveTimer = MOVE_TIMER_RESET;
 		} else if (IsKeyDown(KEY_A)) {
-			player->pos.x -= MOVE_BLOCK;
-			player->attackDir = ATK_LEFT;
+			player->transform->pos.x -= WORLD_DIV;
+			player->player->attackDir = ATK_LEFT;
 			flipped = true;
 			moveTimer = MOVE_TIMER_RESET;
 		} else if (IsKeyDown(KEY_W)) {
-			player->pos.y -= MOVE_BLOCK;
-			player->attackDir = ATK_UP;
+			player->transform->pos.y -= WORLD_DIV;
+			player->player->attackDir = ATK_UP;
 			moveTimer = MOVE_TIMER_RESET;
 		} else if (IsKeyDown(KEY_S)) {
-			player->attackDir = ATK_DOWN;
-			player->pos.y += MOVE_BLOCK;
+			player->player->attackDir = ATK_DOWN;
+			player->transform->pos.y += WORLD_DIV;
 			moveTimer = MOVE_TIMER_RESET;
 		}
 	}
 }
 
 /* RenderIndicator renders the arrow to show how far an attack can hit */
-void RenderIndicator(Player *player) {
-	int attackDir = player->attackDir;
-	// positions for the indicator to be
+void RenderIndicator(Entity *player) {
+	int attackDir = player->player->attackDir;
+	// entity->positions for the indicator to be
 	Vector2 DIRECTION_OFFSETS[] = {
-		{player->pos.x,player->pos.y - MOVE_BLOCK},  	// UP
-		{player->pos.x + MOVE_BLOCK, player->pos.y},   	// RIGHT
-		{player->pos.x,player->pos.y + MOVE_BLOCK},  	// DOWN
-		{player->pos.x - MOVE_BLOCK, player->pos.y},   	// LEFT
+		{player->transform->pos.x,player->transform->pos.y - WORLD_DIV},  	// UP
+		{player->transform->pos.x + WORLD_DIV, player->transform->pos.y},   	// RIGHT
+		{player->transform->pos.x,player->transform->pos.y + WORLD_DIV},  	// DOWN
+		{player->transform->pos.x - WORLD_DIV, player->transform->pos.y},   	// LEFT
 	};
 
-	DrawTextureV(player->indicators[attackDir], DIRECTION_OFFSETS[attackDir], WHITE);
+	DrawTextureV(player->player->indicators[attackDir], DIRECTION_OFFSETS[attackDir], WHITE);
 }
 
