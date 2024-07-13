@@ -9,19 +9,35 @@ static bool flipped = false;
 
 /* InitPlayer sets the player's properties for the game */
 Entity *InitPlayer(void) {
-	Vector2 pos = (Vector2){100, 100};
-	Rectangle coll2D = (Rectangle){pos.x, pos.y, WORLD_DIV, WORLD_DIV};
 	Entity *player =malloc(sizeof(Entity));
 	if (player == NULL) {
 		return NULL;
 	}
 
+	player->isStatic = false;
 	player->render = AddRenderComp(1, 2);
-	if (player->render == NULL) return NULL;
+	if (player->render == NULL) {
+		free(player);
+		return NULL;
+	}
+
 	player->player = AddPlayerComp();
-	if (player->player == NULL) return NULL;
+	if (player->player == NULL) {
+		free(player->render);
+		free(player);
+		return NULL;
+	}
+
+	Vector2 pos = (Vector2){100, 100};
+	Rectangle coll2D = (Rectangle){pos.x, pos.y, WORLD_DIV, WORLD_DIV};
 	player->transform = AddTransformComp(pos, coll2D);
-	if (player->transform == NULL) return NULL;
+	/* might have to call cleanentity here */
+	if (player->transform == NULL) {
+		free(player->render);
+		free(player->player);
+		free(player);
+		return NULL;
+	}
 
 	return player;
 }

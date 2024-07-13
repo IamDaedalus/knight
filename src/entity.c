@@ -93,6 +93,17 @@ CTransform *AddTransformComp(Vector2 pos, Rectangle coll2D) {
 	return transform;
 }
 
+Entity *EmptyEntity(Vector2 pos) {
+	Entity *e = malloc(sizeof(Entity));
+	if (e == NULL) {
+		return NULL;
+	}
+
+	e->transform = AddTransformComp(pos, (Rectangle){pos.x, pos.y, WORLD_DIV, WORLD_DIV});
+
+	return e;
+}
+
 void CleanUpEntity(Entity *entity) {
 	if (entity == NULL) {
 		return;

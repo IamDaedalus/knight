@@ -12,6 +12,7 @@ typedef enum {
 	TAG_PLAYER = 0,
 	TAG_SAVE_POINT,
 	TAG_BEETLE,
+	TAG_GRASS,
 	TAG_TERRAIN,
 }Tag ;
 
@@ -41,13 +42,14 @@ typedef struct {
 	CTransform *transform;
 	CRender *render;
 	CPlayer *player;
+	Tag tag;
+	bool isStatic;
 } Entity;
 
 char **AssetAcquisition(int bot, int top, int arrLen);
 void FreeAcquisitionArr(char **arr, int arrLen);
 
 void CleanUpEntity(Entity *entity);
-Entity *CreateEntity(size_t len, char **assets, Rectangle bounds, Tag tag);
 CPlayer *AddPlayerComp();
 CRender *AddRenderComp(int bot, int top);
 CTransform *AddTransformComp(Vector2 pos, Rectangle coll2D);
