@@ -4,7 +4,8 @@
 #include <stdlib.h>
 #include <raylib.h>
 
-#define WORLD_DIV 10
+#define IDEAL_DIV 10
+#define WORLD_DIV 20
 #define MAX_ASSET_COUNT 5
 
 

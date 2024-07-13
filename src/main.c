@@ -30,10 +30,10 @@ int Init(EntityManager *manager) {
 
 int main(void) {
 	InitWindow(SCR_W, SCR_H, "Knight Game");
-	ToggleFullscreen();
+	// ToggleFullscreen();
 	SetExitKey(KEY_NULL);
 
-	// Create entity manager
+	/* create entity manager */
 	EntityManager *manager = CreatePool();
 	if (manager == NULL) {
 		printf("Failed to create entity manager. Exiting...\n");
@@ -41,14 +41,14 @@ int main(void) {
 		return -1;
 	}
 
-	// Initialize entities (assuming Init function includes player and terrain)
+	/* initialize entities (assuming init function includes player and terrain) */
 	if (Init(manager) == -1) {
 		printf("Initialization failed. Exiting...\n");
 		CloseWindow();
 		return -1;
 	}
 
-	// Load level data
+	/* load level data */
 	char **levelData = LoadLevelData("./assets/scenes/000");
 	if (levelData == NULL) {
 		printf("Failed to load level data. Exiting...\n");
@@ -56,7 +56,7 @@ int main(void) {
 		return -1;
 	}
 
-	// Load level entities
+	/* load level entities */
 	Entity ***currentLevel = LoadLevel(levelData, manager);
 	if (currentLevel == NULL) {
 		printf("Failed to load level entities. Exiting...\n");
@@ -71,11 +71,11 @@ int main(void) {
 
 		ClearBackground(BLACK);
 
-		// Draw entities in current level
-		for (int i = 0; i < WORLD_DIV; i++) {
-			for (int j = 0; j < WORLD_DIV; j++) {
+		/* draw entities in current level */
+		for (int i = 0; i < IDEAL_DIV; i++) {
+			for (int j = 0; j < IDEAL_DIV; j++) {
 				if (currentLevel[i][j] != NULL) {
-					Vector2 position = {(float)((float)j * WORLD_DIV), (float)((float)i * WORLD_DIV)};
+					Vector2 position = {(float)SCR_W/3 + ((float)j * WORLD_DIV), (float)SCR_H/3+((float)i * WORLD_DIV)};
 					DrawTextureV(currentLevel[i][j]->render->curSprite, position, WHITE);
 				}
 			}
