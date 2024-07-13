@@ -1,4 +1,5 @@
 #include "level.h"
+#include "entity.h"
 
 #include <string.h>
 #include <raylib.h>
@@ -124,7 +125,7 @@ int PopulateLevelGrid(Entity ***objs, char **levelData, EntityManager *manager) 
 					objs[i][j] = GetEntityByTag(manager, TAG_PLAYER);
 					break;
 				case '#':
-					objs[i][j] = GetEntityByTag(manager, TAG_GRASS);
+					objs[i][j] = GetEntityByTag(manager, TAG_TERRAIN);
 					break;
 				default:
 					objs[i][j] = NULL;
