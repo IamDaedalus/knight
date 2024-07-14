@@ -12,7 +12,7 @@
 //
 // 	save = CreateEntity(4,
 // 			(char*[]){"assets7.png","assets8.png","assets9.png","assets10.png"}, 
-// 			(Rectangle){pos.x - WORLD_DIV, pos.y, 3*WORLD_DIV, 3*WORLD_DIV},
+// 			(Rectangle){pos.x - PIXEL_CNT, pos.y, 3*PIXEL_CNT, 3*PIXEL_CNT},
 // 			TAG_SAVE_POINT
 // 	);
 // 	save->curSave = isSavePoint;

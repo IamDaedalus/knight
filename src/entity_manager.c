@@ -57,25 +57,22 @@ void CleanUpPool(EntityManager *manager) {
 	free(manager);
 }
 
-/* GetEntityByTag returns either a copy of the gameobject if it's marked static
- * or a pointer to the gameobject if it's not
- */
-Entity *GetEntityByTag(const EntityManager *manager, Tag tag) {
+/* GetEntityByTag returns a copy of the gameobject  */
+Entity *GetEntityByTag(EntityManager *manager, Tag tag) {
 	if (manager == NULL) {
 		printf("manager is NULL; it might have been freed or isn't initialized yet\r");
 		return NULL;
 	}
 
 	for (size_t i = 0; i < manager->count; i++) {
-		Entity *e = manager->entities[i];
-		if (e->tag == tag) {
+		if (manager->entities[i]->tag == tag) {
 			/* create and return a copy of the gameobject */
 			Entity *entity = malloc(sizeof(Entity));
 			if (entity == NULL) {
 				return NULL;
 			}
 
-			memcpy(entity, e, sizeof(Entity));
+			memcpy(entity, manager->entities[i], sizeof(Entity));
 			return entity;
 		}
 	}

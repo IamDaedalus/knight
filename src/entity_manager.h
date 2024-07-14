@@ -13,7 +13,7 @@ typedef struct {
 
 EntityManager *CreatePool();
 void CleanUpPool(EntityManager *manager);
-Entity *GetEntityByTag(const EntityManager *manager, Tag tag);
+Entity *GetEntityByTag(EntityManager *manager, Tag tag);
 int AddEntityToPool(EntityManager *manager, Entity *entity);
 
 #endif /*ENTITY_MANAGER_H*/

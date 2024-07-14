@@ -4,7 +4,7 @@
 #include <raylib.h>
 
 Entity *InitTerrain(TerrainType terrain) {
-	Entity *t = malloc(sizeof(Entity));
+	Entity *t = calloc(1, sizeof(Entity));
 	if (t == NULL) {
 		return NULL;
 	}
@@ -17,7 +17,7 @@ Entity *InitTerrain(TerrainType terrain) {
 	}
 	t->render->curSprite = t->render->sprites[terrain];
 
-	t->transform = AddTransformComp((Vector2){0, 0}, (Rectangle){0,0,IDEAL_DIV, IDEAL_DIV});
+	t->transform = AddTransformComp((Vector2){0, 0}, (Rectangle){0,0,WORLD_DIV, WORLD_DIV});
 	if (t->transform == NULL) {
 		free(t->render);
 		free(t);
@@ -25,6 +25,7 @@ Entity *InitTerrain(TerrainType terrain) {
 	}
 
 	t->isStatic = true;
+	t->player = NULL;
 
 	return t;
 }

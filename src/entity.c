@@ -99,7 +99,7 @@ Entity *EmptyEntity(Vector2 pos) {
 		return NULL;
 	}
 
-	e->transform = AddTransformComp(pos, (Rectangle){pos.x, pos.y, WORLD_DIV, WORLD_DIV});
+	e->transform = AddTransformComp(pos, (Rectangle){pos.x, pos.y, PIXEL_CNT, PIXEL_CNT});
 
 	return e;
 }
@@ -110,11 +110,11 @@ void CleanUpEntity(Entity *entity) {
 	}
 
 	if (entity->render) {
-		UnloadGraphicsFor(entity->render->sprites, MAX_ASSET_COUNT);
+		// UnloadGraphicsFor(entity->render->sprites, MAX_ASSET_COUNT);
 		free(entity->render);
 	}
 	if (entity->player) {
-		UnloadGraphicsFor(entity->player->indicators, 4);
+		// UnloadGraphicsFor(entity->player->indicators, 4);
 		free(entity->player);
 	}
 
