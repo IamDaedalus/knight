@@ -27,6 +27,7 @@ void LoadGraphicsFor(Texture2D arr[], size_t len, char *names[]) {
 	}
 }
 
+/* this might not be needed after all */
 void UnloadGraphicsFor(Texture2D arr[], size_t len) {
 	if (arr == NULL) return;
 

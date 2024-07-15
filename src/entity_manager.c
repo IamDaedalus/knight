@@ -1,5 +1,6 @@
 #include "entity.h"
 #include "entity_manager.h"
+#include <raylib.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -78,4 +79,14 @@ Entity *GetEntityByTag(EntityManager *manager, Tag tag) {
 	}
 
 	return NULL;
+}
+
+void UpdateEntityCollisionRec(Rectangle *rect, Vector2 pos) {
+	if (rect == NULL) {
+		printf("this rectangle is NULL. check again\n");
+		return;
+	}
+
+	rect->x = pos.x;
+	rect->y = pos.y;
 }

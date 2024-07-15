@@ -17,7 +17,7 @@ Entity *InitTerrain(TerrainType terrain) {
 	}
 	t->render->curSprite = t->render->sprites[terrain];
 
-	t->transform = AddTransformComp((Vector2){0, 0}, (Rectangle){0,0,WORLD_DIV, WORLD_DIV});
+	t->transform = AddTransformComp((Vector2){0, 0}, (Rectangle){0,0,PIXEL_CNT, PIXEL_CNT});
 	if (t->transform == NULL) {
 		free(t->render);
 		free(t);
@@ -25,7 +25,6 @@ Entity *InitTerrain(TerrainType terrain) {
 	}
 
 	t->isStatic = true;
-	t->player = NULL;
 
 	return t;
 }
